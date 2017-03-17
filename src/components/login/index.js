@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Form, Divider, Icon } from "semantic-ui-react";
 import { signInWithProvider } from "../../helpers/auth";
 import { Link } from "react-router-dom";
+import FormField from "../form-field";
 import { facebook, google, auth } from "../../config/constants";
 import "./index.css";
 
@@ -18,28 +19,16 @@ class Login extends Component {
           }}
         >
           <Form.Group>
-            <Form.Field>
-              <label>
-                Email :
-              </label>
-              <input
-                name="email"
-                type="email"
-                ref={email => this.email = email}
-                placeholder="Type your email"
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>
-                Password :
-              </label>
-              <input
-                name="pw"
-                type="password"
-                ref={pw => this.pw = pw}
-                placeholder="Type your password"
-              />
-            </Form.Field>
+            <FormField
+              name="email"
+              type="email"
+              reference={email => this.email = email}
+            />
+            <FormField
+              name="pw"
+              type="password"
+              reference={pw => this.pw = pw}
+            />
           </Form.Group>
           <Button primary type="submit">SIGN IN</Button>
 

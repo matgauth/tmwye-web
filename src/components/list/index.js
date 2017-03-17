@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ref } from "../../config/constants";
+import { MOVIE_SEARCH, API_KEY } from "../../config/constants";
 import Element from "../element";
 import { Item } from "semantic-ui-react";
 import "./index.css";
@@ -7,39 +7,22 @@ import "./index.css";
 class List extends Component {
   state = { list: [] };
 
-  componentWillMount() {
-    let list = [];
-    const mRef = ref.child("medias");
-    mRef.on("child_added", snap => {
-      list.push(snap.val());
-      this.setState({ list });
-    });
-
-    mRef.on("child_changed", snap => {
-      let index = list.findIndex(e => e.id === snap.val().id);
-      list[index] = snap.val();
-      this.setState({ list });
-    });
-
-    mRef.on("child_removed", snap => {
-      let index = list.findIndex(e => e.id === snap.val().id);
-      if (index > -1) {
-        list.splice(index, 1);
-        this.setState({ list });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    ref.child("medias").off();
+  async componentDidMount() {
+    const { match } = this.props;
+    let res = await fetch(
+      `${MOVIE_SEARCH}/genre/${match.params.genreId}/movies?api_key=${API_KEY}&language=${navigator.language}&include_adult=false&sort_by=created_at.asc`
+    ),
+      json = await res.json(),
+      list = json ? json.results : [];
+    this.setState({ list });
   }
 
   render() {
-    const { list: l } = this.state;
+    const { list } = this.state;
     return (
       <div className="list-container">
         <Item.Group divided>
-          {l.map((el, i) => <Element key={el.id} result={el} />)}
+          {list.map((el, i) => <Element key={el.id} result={el} />)}
         </Item.Group>
       </div>
     );

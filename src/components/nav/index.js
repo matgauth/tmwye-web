@@ -4,9 +4,19 @@ import { auth } from "../../config/constants";
 import { Menu, Button, Icon } from "semantic-ui-react";
 
 const Navigation = ({ loggedIn, signOut }) => (
-  <Menu inverted fixed="top">
+  <Menu inverted fixed="top" style={{ opacity: 0.9 }}>
     {loggedIn && auth.currentUser
       ? <Menu.Menu position="right">
+          <Menu.Item>
+            <Link to="/food">
+              <Icon name="food" />
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to="/movies">
+              <Icon name="film" />
+            </Link>
+          </Menu.Item>
           <Menu.Item>
             <Link to="/account">
               <Icon name="user" />{auth.currentUser.email}

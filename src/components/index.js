@@ -7,17 +7,20 @@ import Navigation from "../components/nav";
 import Login from "../components/login";
 import Register from "../components/register";
 import List from "../components/list";
+import Genres from "../components/genres";
+import "./index.css";
 
-function PrivateRoute({ comp: Component, loggedIn, ...rest }) {
+function PrivateRoute({ comp: Component, compProps, loggedIn, ...rest }) {
   return (
     <Route
       {...rest}
-      render={props =>
-        loggedIn === true
-          ? <Component {...props} />
+      render={props => {
+        return loggedIn === true
+          ? <Component {...props} {...compProps} />
           : <Redirect
               to={{ pathname: "/login", state: { from: props.location } }}
-            />}
+            />;
+      }}
     />
   );
 }
@@ -61,19 +64,39 @@ class App extends Component {
   }
 
   render() {
-    const { loading: l, loggedIn: log } = this.state;
-    return l === true
-      ? <Dimmer active={l} inverted page>
-          <Loader>Loading</Loader>
+    const { loading, loggedIn } = this.state;
+    return loading === true
+      ? <Dimmer active={loading} inverted page>
+          <Loader />
         </Dimmer>
       : <BrowserRouter>
           <div>
-            <Navigation signOut={this.handleSignOut} loggedIn={log} />
-            <Container>
+            <Navigation signOut={this.handleSignOut} loggedIn={loggedIn} />
+            <Container className="app-container">
               <Switch>
-                <PublicRoute loggedIn={log} path="/login" comp={Login} />
-                <PublicRoute loggedIn={log} path="/register" comp={Register} />
-                <PrivateRoute loggedIn={log} path="/" comp={List} />
+                <PublicRoute loggedIn={loggedIn} path="/login" comp={Login} />
+                <PublicRoute
+                  loggedIn={loggedIn}
+                  path="/register"
+                  comp={Register}
+                />
+                <PrivateRoute
+                  loggedIn={loggedIn}
+                  path="/list/:genreId"
+                  comp={List}
+                />
+                <PrivateRoute
+                  loggedIn={loggedIn}
+                  path="/movies"
+                  compProps={{ fbKey: "genres" }}
+                  comp={Genres}
+                />
+                <PrivateRoute
+                  loggedIn={loggedIn}
+                  path="/food"
+                  compProps={{ fbKey: "food" }}
+                  comp={Genres}
+                />
                 <Route render={() => <h3>No Match</h3>} />
               </Switch>
             </Container>
