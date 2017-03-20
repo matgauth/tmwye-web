@@ -19,9 +19,16 @@ const Element = ({ result, food }) => {
           <p className="el-plot">{result.overview}</p>
         </Item.Description>
         <Item.Extra>
-          {Object.keys(food).map(key => (
-            <VoteButton key={food[key].id} catId={food[key].id} resultId={result.id.toString()} />
-          ))}
+          {food &&
+            Object.keys(food).map(key => (
+              <VoteButton
+                key={food[key].id}
+                catId={food[key].id}
+                resultId={result.id.toString()}
+                color="red"
+                icon="food"
+              />
+            ))}
         </Item.Extra>
       </Item.Content>
     </Item>
