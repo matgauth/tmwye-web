@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, BrowserRouter, Redirect, Switch } from "react-router-dom";
-import { Dimmer, Loader, Container } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 
 import { auth } from "../config/constants";
 import Navigation from "../components/nav";
@@ -8,15 +8,16 @@ import Login from "../components/login";
 import Register from "../components/register";
 import List from "../components/list";
 import Genres from "../components/genres";
+import Spinner from "../components/spinner";
 import "./index.css";
 
-function PrivateRoute({ comp: Component, compProps, loggedIn, ...rest }) {
+function PrivateRoute({ comp: Component, loggedIn, ...rest }) {
   return (
     <Route
       {...rest}
       render={props => {
         return loggedIn === true
-          ? <Component {...props} {...compProps} />
+          ? <Component {...props} />
           : <Redirect
               to={{ pathname: "/login", state: { from: props.location } }}
             />;
@@ -50,11 +51,12 @@ class App extends Component {
   };
   componentDidMount() {
     this.removeListener = auth.onAuthStateChanged(user => {
-      if (user && user.emailVerified) {
+      if (user) {
         this.setState({
           loggedIn: true
         });
       }
+      console.log(user);
       this.setState({ loading: false });
     });
   }
@@ -66,9 +68,7 @@ class App extends Component {
   render() {
     const { loading, loggedIn } = this.state;
     return loading === true
-      ? <Dimmer active={loading} inverted page>
-          <Loader />
-        </Dimmer>
+      ? <Spinner loading={loading} />
       : <BrowserRouter>
           <div>
             <Navigation signOut={this.handleSignOut} loggedIn={loggedIn} />
@@ -87,14 +87,12 @@ class App extends Component {
                 />
                 <PrivateRoute
                   loggedIn={loggedIn}
-                  path="/movies"
-                  compProps={{ fbKey: "genres" }}
+                  path="/movies/:fbKey"
                   comp={Genres}
                 />
                 <PrivateRoute
                   loggedIn={loggedIn}
-                  path="/food"
-                  compProps={{ fbKey: "food" }}
+                  path="/food/:fbKey"
                   comp={Genres}
                 />
                 <Route render={() => <h3>No Match</h3>} />

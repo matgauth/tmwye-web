@@ -23,7 +23,6 @@ function saveUser(user) {
     email: user.email,
     uid: user.uid,
     displayName: user.displayName,
-    photoURL: user.photoURL,
-    providerId: user.providerId
+    photoURL: user.photoURL
   });
 }

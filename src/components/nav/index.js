@@ -8,12 +8,12 @@ const Navigation = ({ loggedIn, signOut }) => (
     {loggedIn && auth.currentUser
       ? <Menu.Menu position="right">
           <Menu.Item>
-            <Link to="/food">
+            <Link to="/food/categories">
               <Icon name="food" />
             </Link>
           </Menu.Item>
           <Menu.Item>
-            <Link to="/movies">
+            <Link to="/movies/genres">
               <Icon name="film" />
             </Link>
           </Menu.Item>
