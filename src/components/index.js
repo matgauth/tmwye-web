@@ -92,7 +92,7 @@ class App extends Component {
                 />
                 <PrivateRoute
                   loggedIn={loggedIn}
-                  path="/food/:fbKey"
+                  path="/:fbKey"
                   comp={Genres}
                 />
                 <Route render={() => <h3>No Match</h3>} />

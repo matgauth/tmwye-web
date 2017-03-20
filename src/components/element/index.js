@@ -5,7 +5,7 @@ import Image from "../fake-element/image.webp";
 import VoteButton from "../vote-button";
 import "./index.css";
 
-const Element = ({ result }) => {
+const Element = ({ result, food }) => {
   const poster = result.poster_path ? IMAGE_SEARCH + result.poster_path : Image;
   return (
     <Item>
@@ -19,7 +19,9 @@ const Element = ({ result }) => {
           <p className="el-plot">{result.overview}</p>
         </Item.Description>
         <Item.Extra>
-          <VoteButton catId={1} resultId={result.id.toString()} />
+          {Object.keys(food).map(key => (
+            <VoteButton key={food[key].id} catId={food[key].id} resultId={result.id.toString()} />
+          ))}
         </Item.Extra>
       </Item.Content>
     </Item>

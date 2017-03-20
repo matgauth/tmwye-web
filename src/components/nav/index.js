@@ -8,7 +8,7 @@ const Navigation = ({ loggedIn, signOut }) => (
     {loggedIn && auth.currentUser
       ? <Menu.Menu position="right">
           <Menu.Item>
-            <Link to="/food/categories">
+            <Link to="/food">
               <Icon name="food" />
             </Link>
           </Menu.Item>
