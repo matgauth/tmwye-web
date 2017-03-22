@@ -3,7 +3,6 @@ import { MOVIE_SEARCH, API_KEY, ref } from "../../config/constants";
 import Element from "../element";
 import FakeElement from "../fake-element";
 import { Item } from "semantic-ui-react";
-import "./index.css";
 const QUERIES = `api_key=${API_KEY}&language=${navigator.language}&include_adult=false&sort_by=created_at.asc`;
 class List extends Component {
   state = { list: [], food: null };
@@ -25,15 +24,11 @@ class List extends Component {
   render() {
     const { list, food } = this.state;
     return (
-      <div className="list-container">
-        <Item.Group divided>
-          {list.length > 0
-            ? list.map((el, i) => (
-                <Element key={el.id} result={el} food={food} />
-              ))
-            : new Array(5).fill(null).map((el, i) => <FakeElement key={i} />)}
-        </Item.Group>
-      </div>
+      <Item.Group divided>
+        {list.length > 0
+          ? list.map((el, i) => <Element key={el.id} result={el} food={food} />)
+          : new Array(5).fill(null).map((el, i) => <FakeElement key={i} />)}
+      </Item.Group>
     );
   }
 }

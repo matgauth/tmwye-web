@@ -3,7 +3,6 @@ import { Item } from "semantic-ui-react";
 import { IMAGE_SEARCH } from "../../config/constants";
 import Image from "../fake-element/image.webp";
 import VoteButton from "../vote-button";
-import "./index.css";
 
 const Element = ({ result, food }) => {
   const poster = result.poster_path ? IMAGE_SEARCH + result.poster_path : Image;
@@ -16,14 +15,14 @@ const Element = ({ result, food }) => {
           <span>{result.release_date}</span>
         </Item.Meta>
         <Item.Description>
-          <p className="el-plot">{result.overview}</p>
+          <p style={{ textAlign: "justify" }}>{result.overview}</p>
         </Item.Description>
         <Item.Extra>
           {food &&
             Object.keys(food).map(key => (
               <VoteButton
                 key={food[key].id}
-                catId={food[key].id}
+                cat={food[key]}
                 resultId={result.id.toString()}
                 color="red"
                 icon="food"

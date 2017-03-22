@@ -1,12 +1,8 @@
-import { ref, auth } from "../config/constants";
-
-export function handleVote(imbdID, catID) {
+import { auth, ref } from "../config/constants";
+export function handleVote(imdbId, catId) {
   const uid = auth.currentUser.uid;
 
-  const voteObj = {
-    imdbID: imbdID,
-    [uid]: catID
-  };
-
-  ref.child(`/medias/${imbdID}`).update(voteObj);
+  ref.child(`/medias/${imdbId}/${catId}/votes`).update({
+    [uid]: true
+  });
 }

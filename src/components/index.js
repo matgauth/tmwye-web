@@ -56,7 +56,6 @@ class App extends Component {
           loggedIn: true
         });
       }
-      console.log(user);
       this.setState({ loading: false });
     });
   }
