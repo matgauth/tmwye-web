@@ -1,8 +1,8 @@
 import { auth, ref } from "../config/constants";
 export function handleVote(imdbId, catId) {
   const uid = auth.currentUser.uid;
-
-  ref.child(`/medias/${imdbId}/${catId}/votes`).update({
-    [uid]: true
-  });
+  let updates = {};
+  updates[`/medias/${imdbId}/${catId}/votes`] = { [uid]: true };
+  updates[`/mediasPerCat/${catId}/votes`] = {};
+  ref.update(updates);
 }

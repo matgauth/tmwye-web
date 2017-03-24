@@ -71,7 +71,7 @@ class App extends Component {
       : <BrowserRouter>
           <div>
             <Navigation signOut={this.handleSignOut} loggedIn={loggedIn} />
-            <Container className="app-container">
+            <Container text textAlign='center' className="app-container">
               <Switch>
                 <PublicRoute loggedIn={loggedIn} path="/login" comp={Login} />
                 <PublicRoute

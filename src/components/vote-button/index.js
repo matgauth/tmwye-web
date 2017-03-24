@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Popup, Statistic, Loader } from "semantic-ui-react";
+import { Button, Popup, Statistic, Icon } from "semantic-ui-react";
 import { ref } from "../../config/constants";
 import { handleVote } from "../../helpers/database";
 
@@ -9,15 +9,22 @@ class VoteButton extends Component {
     const { resultId, cat } = this.props;
     const mRef = ref.child(`medias/${resultId}/${cat.id}`).limitToLast(1);
 
-    mRef.on("child_added", snap => {
-      let countVotes = snap.val();
-      this.setState({ countVotes });
-    });
+    mRef.on("child_added", this.handleCountVotes);
 
-    mRef.on("child_changed", snap => {
-      let countVotes = snap.val();
-      this.setState({ countVotes });
-    });
+    mRef.on("child_changed", this.handleCountVotes);
+
+    mRef.on("child_removed", this.handleCountVotes);
+  }
+
+  handleCountVotes = snap => {
+    let countVotes = snap.val();
+    this.setState({ countVotes });
+  };
+
+  componentWillUnmount() {
+    const { resultId, cat } = this.props;
+    const mRef = ref.child(`medias/${resultId}/${cat.id}`);
+    mRef.off();
   }
 
   render() {
@@ -35,9 +42,13 @@ class VoteButton extends Component {
               content: (
                 <Statistic size="mini" color={color}>
                   <Statistic.Value>
-                    {countVotes >= 0 ? countVotes : <Loader />}
+                    {countVotes >= 0
+                      ? countVotes
+                      : <Icon name="circle notched" loading />}
                   </Statistic.Value>
-                  <Statistic.Label>Votes</Statistic.Label>
+                  <Statistic.Label>
+                    {countVotes >= 0 ? "Votes" : null}
+                  </Statistic.Label>
                 </Statistic>
               )
             }}

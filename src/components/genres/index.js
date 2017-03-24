@@ -25,7 +25,7 @@ class Genres extends Component {
     let loading = genres === null;
     return loading
       ? <Spinner loading={loading} />
-      : <Card.Group itemsPerRow={3}>
+      : <Card.Group stackable>
           {Object.keys(genres).map(key => (
             <Genre key={genres[key].id} genre={genres[key]} />
           ))}
