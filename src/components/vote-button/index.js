@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Button, Popup, Statistic, Icon } from "semantic-ui-react";
-import { ref } from "../../config/constants";
+import { ref, auth } from "../../config/constants";
 import { handleVote } from "../../helpers/database";
 
 class VoteButton extends Component {
-  state = { countVotes: 0 };
+  state = { countVotes: 0, selected: false };
   componentWillMount() {
     const { resultId, cat } = this.props;
     const mRef = ref.child(`medias/${resultId}/${cat.id}`).limitToLast(1);
@@ -14,6 +14,16 @@ class VoteButton extends Component {
     mRef.on("child_changed", this.handleCountVotes);
 
     mRef.on("child_removed", this.handleCountVotes);
+
+    const votesRef = ref.child(`medias/${resultId}/${cat.id}/votes`);
+    votesRef.on("value", snap => {
+      const uid = auth.currentUser.uid;
+      if (snap.child(uid).exists()) {
+        this.setState({ selected: true });
+      } else {
+        this.setState({ selected: false });
+      }
+    });
   }
 
   handleCountVotes = snap => {
@@ -28,14 +38,15 @@ class VoteButton extends Component {
   }
 
   render() {
-    const { countVotes } = this.state;
-    const { resultId, cat, color, icon } = this.props;
+    const { countVotes, selected } = this.state;
+    const { resultId, cat } = this.props;
+    let color = selected ? "red" : "black";
     return (
       <Popup
         trigger={
           <Button
             color={color}
-            icon={icon}
+            icon="food"
             label={{
               basic: true,
               pointing: "left",
@@ -52,7 +63,7 @@ class VoteButton extends Component {
                 </Statistic>
               )
             }}
-            onClick={() => handleVote(resultId, cat.id)}
+            onClick={() => handleVote(resultId, cat.id, selected)}
           />
         }
         content={cat.name}

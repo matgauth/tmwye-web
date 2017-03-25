@@ -24,8 +24,6 @@ const Element = ({ result, food }) => {
                 key={food[key].id}
                 cat={food[key]}
                 resultId={result.id.toString()}
-                color="red"
-                icon="food"
               />
             ))}
         </Item.Extra>
