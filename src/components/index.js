@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { Route, BrowserRouter, Redirect, Switch } from "react-router-dom";
-import { Container } from "semantic-ui-react";
-
 import { auth } from "../config/constants";
 import Navigation from "../components/nav";
 import Login from "../components/login";
 import Register from "../components/register";
-import List from "../components/list";
-import Genres from "../components/genres";
+import ListByGenre from "../components/list-by-genre";
+import ListByFood from "../components/list-by-food";
+import Categories from "../components/categories";
 import Spinner from "../components/spinner";
-import "./index.css";
 
 function PrivateRoute({ comp: Component, loggedIn, ...rest }) {
   return (
@@ -71,32 +69,35 @@ class App extends Component {
       : <BrowserRouter>
           <div>
             <Navigation signOut={this.handleSignOut} loggedIn={loggedIn} />
-            <Container text textAlign='center' className="app-container">
-              <Switch>
-                <PublicRoute loggedIn={loggedIn} path="/login" comp={Login} />
-                <PublicRoute
-                  loggedIn={loggedIn}
-                  path="/register"
-                  comp={Register}
-                />
-                <PrivateRoute
-                  loggedIn={loggedIn}
-                  path="/list/:genreId"
-                  comp={List}
-                />
-                <PrivateRoute
-                  loggedIn={loggedIn}
-                  path="/movies/:fbKey"
-                  comp={Genres}
-                />
-                <PrivateRoute
-                  loggedIn={loggedIn}
-                  path="/:fbKey"
-                  comp={Genres}
-                />
-                <Route render={() => <h3>No Match</h3>} />
-              </Switch>
-            </Container>
+            <Switch>
+              <PublicRoute loggedIn={loggedIn} path="/login" comp={Login} />
+              <PublicRoute
+                loggedIn={loggedIn}
+                path="/register"
+                comp={Register}
+              />
+              <PrivateRoute
+                loggedIn={loggedIn}
+                path="/list-by-genres/:genreId"
+                comp={ListByGenre}
+              />
+              <PrivateRoute
+                loggedIn={loggedIn}
+                path="/list-by-food/:foodId"
+                comp={ListByFood}
+              />
+              <PrivateRoute
+                loggedIn={loggedIn}
+                path="/movies/:fbKey"
+                comp={Categories}
+              />
+              <PrivateRoute
+                loggedIn={loggedIn}
+                path="/:fbKey"
+                comp={Categories}
+              />
+              <Route render={() => <h3>No Match</h3>} />
+            </Switch>
           </div>
         </BrowserRouter>;
   }

@@ -13,16 +13,16 @@ class VoteButton extends Component {
 
     mRef.on("child_changed", this.handleCountVotes);
 
-    mRef.on("child_removed", this.handleCountVotes);
+    mRef.on("child_removed", snap => {
+      if (snap.numChildren() > 0) this.handleCountVotes(snap);
+      else this.setState({ countVotes: 0 });
+    });
 
     const votesRef = ref.child(`medias/${resultId}/${cat.id}/votes`);
     votesRef.on("value", snap => {
       const uid = auth.currentUser.uid;
-      if (snap.child(uid).exists()) {
-        this.setState({ selected: true });
-      } else {
-        this.setState({ selected: false });
-      }
+      if (snap.child(uid).exists()) this.setState({ selected: true });
+      else this.setState({ selected: false });
     });
   }
 

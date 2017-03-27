@@ -3,9 +3,14 @@ export function handleVote(imdbId, catId, selected) {
   const uid = auth.currentUser.uid;
   if (selected) {
     ref.child(`medias/${imdbId}/${catId}/votes/${uid}`).remove();
+    ref.child(`mediasByFood/${catId}/${imdbId}/votes/${uid}`).remove();
   } else {
     let updates = {};
-    updates[`/medias/${imdbId}/${catId}/votes`] = { [uid]: true };
+    const voteObj = {
+      [uid]: true
+    };
+    updates[`/medias/${imdbId}/${catId}/votes`] = voteObj;
+    updates[`/mediasByFood/${catId}/${imdbId}/votes`] = voteObj;
     ref.update(updates);
   }
 }

@@ -4,7 +4,7 @@ import { IMAGE_SEARCH } from "../../config/constants";
 import Image from "../fake-element/image.webp";
 import VoteButton from "../vote-button";
 
-const Element = ({ result, food }) => {
+const ElementByGenre = ({ result, food }) => {
   const poster = result.poster_path ? IMAGE_SEARCH + result.poster_path : Image;
   return (
     <Item>
@@ -32,4 +32,4 @@ const Element = ({ result, food }) => {
   );
 };
 
-export default Element;
+export default ElementByGenre;

@@ -4,7 +4,7 @@ import { Form } from "semantic-ui-react";
 const FormField = ({ name, type, reference }) => (
   <Form.Field>
     <label>
-      {name} :
+      {type === "password" ? "Password" : "Email"} :
     </label>
     <input name={name} type={type} ref={reference} />
   </Form.Field>

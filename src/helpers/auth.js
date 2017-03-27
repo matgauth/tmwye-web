@@ -1,21 +1,15 @@
 import { ref, auth } from "../config/constants";
 
-export async function signUp(email, pw) {
-  try {
-    const res = await auth.createUserWithEmailAndPassword(email, pw);
-    saveUser(res);
-  } catch (err) {
-    console.error(err);
-  }
+export function signUp(email, pw) {
+  return auth.createUserWithEmailAndPassword(email, pw).then(saveUser);
 }
 
-export async function signInWithProvider(provider) {
-  try {
-    const res = await auth.signInWithPopup(provider);
-    saveUser(res.user);
-  } catch (err) {
-    console.error(err);
-  }
+export function signInWithProvider(provider) {
+  return auth.signInWithPopup(provider).then(res => saveUser(res.user));
+}
+
+export function resetPassword(email) {
+  return auth.sendPasswordResetEmail(email);
 }
 
 function saveUser(user) {
