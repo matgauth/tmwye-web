@@ -83,7 +83,7 @@ class App extends Component {
               />
               <PrivateRoute
                 loggedIn={loggedIn}
-                path="/list-by-food/:foodId"
+                path="/list-by-food/:foodId/:foodName"
                 comp={ListByFood}
               />
               <PrivateRoute

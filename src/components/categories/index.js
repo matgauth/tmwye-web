@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ref } from "../../config/constants";
 import Category from "../category";
 import Spinner from "../spinner";
-import { Card } from "semantic-ui-react";
+import { Card, Container } from "semantic-ui-react";
 
 class Categories extends Component {
   state = { categories: null };
@@ -22,18 +22,21 @@ class Categories extends Component {
 
   render() {
     const { categories } = this.state;
+    const style = { margin: "5em auto" };
     let loading = categories === null;
     return loading
       ? <Spinner loading={loading} />
-      : <Card.Group stackable style={{ marginTop: "5em" }}>
-          {Object.keys(categories).map(key => (
-            <Category
-              key={categories[key].id}
-              fbKey={this.props.match.params.fbKey}
-              category={categories[key]}
-            />
-          ))}
-        </Card.Group>;
+      : <Container text textAlign="center" style={style}>
+          <Card.Group>
+            {Object.keys(categories).map(key => (
+              <Category
+                key={categories[key].id}
+                fbKey={this.props.match.params.fbKey}
+                category={categories[key]}
+              />
+            ))}
+          </Card.Group>
+        </Container>;
   }
 }
 

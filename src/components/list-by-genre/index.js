@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { MOVIE_SEARCH, API_KEY, ref } from "../../config/constants";
+import { MOVIE_SEARCH, MOVIE_QUERIES, ref } from "../../config/constants";
 import ElementByGenre from "../element-by-genre";
 import FakeElement from "../fake-element";
 import { Item, Container } from "semantic-ui-react";
-const QUERIES = `api_key=${API_KEY}&language=${navigator.language}&include_adult=false&sort_by=created_at.asc`;
 class ListByGenre extends Component {
   state = { list: [], food: null };
   async componentWillMount() {
@@ -13,7 +12,7 @@ class ListByGenre extends Component {
   }
   async componentDidMount() {
     let res = await fetch(
-      `${MOVIE_SEARCH}/genre/${this.props.match.params.genreId}/movies?${QUERIES}`
+      `${MOVIE_SEARCH}/genre/${this.props.match.params.genreId}/movies?${MOVIE_QUERIES}`
     ),
       json = await res.json(),
       list = json ? json.results : [];
@@ -28,7 +27,7 @@ class ListByGenre extends Component {
             ? list.map((el, i) => (
                 <ElementByGenre key={el.id} result={el} food={food} />
               ))
-            : new Array(5).fill(null).map((el, i) => <FakeElement key={i} />)}
+            : new Array(3).fill(null).map((el, i) => <FakeElement key={i} />)}
         </Item.Group>
       </Container>
     );

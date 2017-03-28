@@ -1,38 +1,53 @@
 import React, { Component } from "react";
-import { MOVIE_SEARCH, API_KEY, ref } from "../../config/constants";
+import { MOVIE_SEARCH, MOVIE_QUERIES, ref } from "../../config/constants";
 import ElementByFood from "../element-by-food";
-import FakeElement from "../fake-element";
+import { Card, Container } from "semantic-ui-react";
 
-import { Item, Container } from "semantic-ui-react";
-const QUERIES = `api_key=${API_KEY}&language=${navigator.language}&include_adult=false&sort_by=created_at.asc`;
+async function searchMovie(data, setState) {
+  const res = await fetch(`${MOVIE_SEARCH}/movie/${data.key}?${MOVIE_QUERIES}`),
+    json = await res.json();
+  json.votes_count = data.val().votes_count;
+  setState(json);
+}
+
 class ListByFood extends Component {
-  state = { list: [] };
-  componentWillMount() {
-    const gRef = ref
+  state = { list: [], total: 0 };
+  async componentWillMount() {
+    const fbRef = ref
       .child(`mediasByFood/${this.props.match.params.foodId}`)
-      .orderByChild("votes_count")
-      .limitToLast(5);
-    let results = [];
-    gRef.on("child_added", async snap => {
-      console.log(snap.val());
+      .orderByChild("votes_count");
 
-      let res = await fetch(`${MOVIE_SEARCH}/movie/${snap.key}?${QUERIES}`),
-        json = await res.json();
-      json.votes_count = snap.val().votes_count;
-      results.push(json);
-      console.log(json);
-      this.setState({ list: results });
+    const movieSnap = await fbRef.limitToLast(10).once("value");
+    movieSnap.forEach(data => {
+      searchMovie(data, json => {
+        this.setState((state, props) => {
+          return { list: [...state.list, json] };
+        });
+      });
+    });
+
+    const totalSnap = await fbRef.once("value");
+    totalSnap.forEach(data => {
+      const votesCount = data.val().votes_count;
+      this.setState((state, props) => {
+        return { total: state.total + votesCount };
+      });
     });
   }
   render() {
-    const { list } = this.state;
+    const { list, total } = this.state;
     return (
       <Container text textAlign="center" style={{ margin: "5em auto" }}>
-        <Item.Group divided>
-          {list.length > 0
-            ? list.map((el, i) => <ElementByFood key={el.id} result={el} />)
-            : new Array(5).fill(null).map((el, i) => <FakeElement key={i} />)}
-        </Item.Group>
+        <Card.Group>
+          {list.map((el, i) => (
+            <ElementByFood
+              key={el.id}
+              result={el}
+              total={total}
+              food={this.props.match.params.foodName}
+            />
+          ))}
+        </Card.Group>
       </Container>
     );
   }

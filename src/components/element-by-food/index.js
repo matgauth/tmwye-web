@@ -1,28 +1,46 @@
 import React from "react";
-import { Item, Statistic, Segment } from "semantic-ui-react";
+import { Card, Image, Segment, Header } from "semantic-ui-react";
 import { IMAGE_SEARCH } from "../../config/constants";
-import Image from "../fake-element/image.webp";
+import "./index.css";
 
-const ElementByFood = ({ result }) => {
-  const poster = result.poster_path ? IMAGE_SEARCH + result.poster_path : Image;
+const ElementByFood = ({ result, total, food }) => {
+  let percentage = result.votes_count / total * 100;
+  const label = {
+    as: "span",
+    style: { zIndex: 1 },
+    color: "red",
+    content: result.votes_count,
+    icon: "thumbs up",
+    ribbon: true
+  };
   return (
-    <Item>
-      <Item.Image src={poster} alt={`${result.title}-poster`} />
-      <Item.Content>
-        <Item.Header as="h2">{result.title}</Item.Header>
-        <Item.Meta>
-          <span>{result.release_date}</span>
-        </Item.Meta>
-        <Item.Description>
-          <p style={{ textAlign: "justify" }}>{result.overview}</p>
-        </Item.Description>
-        <Item.Extra>
-        <Segment inverted floated="right">
-          <Statistic inverted color='orange' value={result.votes_count} label='Top votes' />
-          </Segment>
-        </Item.Extra>
-      </Item.Content>
-    </Item>
+    <Card raised centered>
+      <Card.Header className="card-link">
+        {result.poster_path
+          ? <Image
+              height="100%"
+              src={IMAGE_SEARCH + result.poster_path}
+              label={label}
+              alt={`${result.title}-poster`}
+            />
+          : <Segment
+              inverted
+              circular
+              style={{ margin: "5em auto", width: 175, height: 175 }}
+            >
+              <Header as="h2" inverted>
+                {result.title}
+                <Header.Subheader>
+                  {result.release_date}
+                </Header.Subheader>
+              </Header>
+            </Segment>}
+      </Card.Header>
+      <Card.Content extra>
+        {isFinite(percentage) &&
+          `Parmi les ${total} votants pour ${food}, ${percentage.toFixed(0)}% préfèrent en manger devant ce film.`}
+      </Card.Content>
+    </Card>
   );
 };
 
