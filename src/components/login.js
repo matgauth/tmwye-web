@@ -4,42 +4,45 @@ import {
   Form,
   Divider,
   Icon,
-  Message,
   Grid,
-  Segment
+  Segment,
+  Header
 } from "semantic-ui-react";
-import { signInWithProvider, resetPassword } from "../../helpers/auth";
+import { signInWithProvider, resetPassword } from "../lib/auth";
 import { Link } from "react-router-dom";
-import FormField from "../form-field";
-import { facebook, google, auth } from "../../config/constants";
+import FormField from "./form-field";
+import ErrorMessage from "./error-message";
+import { facebook, google, auth } from "../lib/fb";
+import "./login-register.css";
 
-function setErrMsg(err) {
-  return { loginMsg: err };
-}
-class Login extends Component {
-  state = { loginMsg: null };
+export default class extends Component {
+  state = { msg: null };
   handleSubmit = e => {
     e.preventDefault();
     auth
       .signInWithEmailAndPassword(this.email.value, this.pw.value)
-      .catch(e => this.setState(setErrMsg("Invalid username/password.")));
+      .catch(e => this.setState({ msg: e.message }));
   };
 
-  resetPassword = () => {
-    resetPassword(this.email.value)
-      .then(() =>
-        this.setState(
-          setErrMsg(`Password reset email sent to ${this.email.value}.`)
-        ))
-      .catch(e => this.setState(setErrMsg("Email address not found.")));
+  resetPassword = async () => {
+    try {
+      await resetPassword(this.email.value);
+      this.setState({
+        msg: `Password reset email sent to ${this.email.value}.`
+      });
+    } catch (e) {
+      this.setState({ msg: e.message });
+    }
   };
-  handleDismiss = () => this.setState({ loginMsg: null });
+  handleDismiss = () => this.setState({ msg: null });
   render() {
-    const { loginMsg } = this.state;
+    const { msg } = this.state;
     return (
-      <Grid verticalAlign="middle" centered style={{ height: "100vh" }}>
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <h1>Log in to your account</h1>
+      <Grid verticalAlign="middle" centered className="login-register">
+        <Grid.Column>
+          <Header as="h1">
+            Log in to your account
+          </Header>
           <Segment.Group stacked>
             <Segment>
               <p>Don't have an account ? <Link to="/register">Sign up</Link></p>
@@ -59,10 +62,12 @@ class Login extends Component {
                   />
                 </Form.Group>
                 <Button primary type="submit">SIGN IN</Button>
-                <MessageError
-                  loginMsg={loginMsg}
-                  handleDismiss={this.handleDismiss}
-                />
+                <p>
+                  <a href="#" onClick={this.resetPassword}>
+                    Forgot your password ?
+                  </a>
+                </p>
+                <ErrorMessage msg={msg} handleDismiss={this.handleDismiss} />
               </Form>
               <Divider horizontal>Or</Divider>
               <ProviderForm provider={google} />
@@ -75,18 +80,6 @@ class Login extends Component {
     );
   }
 }
-
-const MessageError = ({ loginMsg, handleDismiss, resetPassword }) =>
-  loginMsg &&
-  <Message icon error onDismiss={handleDismiss}>
-    <Icon name="warning circle" />
-    <Message.Content>
-      <Message.Header>{loginMsg}</Message.Header>
-      <a href="#" onClick={resetPassword}>
-        Forgot password ?
-      </a>
-    </Message.Content>
-  </Message>;
 
 const ProviderForm = ({ provider }) => {
   let label = provider === google ? "google" : "facebook";
@@ -101,10 +94,8 @@ const ProviderForm = ({ provider }) => {
         color={label === "google" ? label.concat(" plus") : label}
         type="submit"
       >
-        <Icon name={label} /> SIGN IN WITH {label.toLocaleUpperCase()}
+        <Icon name={label} /> SIGN IN WITH {label.toUpperCase()}
       </Button>
     </Form>
   );
 };
-
-export default Login;

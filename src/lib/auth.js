@@ -1,4 +1,4 @@
-import { ref, auth } from "../config/constants";
+import { ref, auth } from "./fb";
 
 export function signUp(email, pw) {
   return auth.createUserWithEmailAndPassword(email, pw).then(saveUser);

@@ -1,33 +1,32 @@
 import React, { Component } from "react";
-import { signUp } from "../../helpers/auth";
-import { auth } from "../../config/constants";
+import { signUp } from "../lib/auth";
+import { auth } from "../lib/constants";
 import { Link } from "react-router-dom";
-import FormField from "../form-field";
-import { Form, Button, Message, Icon, Segment, Grid } from "semantic-ui-react";
-function setErrMsg(err) {
-  return { registerErr: err.message };
-}
-class Register extends Component {
+import FormField from "./form-field";
+import ErrorMessage from "./error-message";
+import { Form, Button, Message, Segment, Grid, Header } from "semantic-ui-react";
+
+export default class extends Component {
   state = {
     emailSent: false,
-    registerErr: null
+    msg: null
   };
   handleSignUp = e => {
     e.preventDefault();
     signUp(this.email.value, this.pw.value).catch(e =>
-      this.setState(setErrMsg(e)));
+      this.setState({ msg: e.message }));
     if (auth.currentUser !== null) {
       auth.currentUser.sendEmailVerification();
       this.setState({ emailSent: true });
     }
   };
-  handleDismiss = () => this.setState({ registerErr: null });
+  handleDismiss = () => this.setState({ msg: null });
   render() {
-    const { emailSent, registerErr } = this.state;
+    const { emailSent, msg } = this.state;
     return (
-      <Grid verticalAlign="middle" centered style={{ height: "100vh" }}>
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <h1>Create your account</h1>
+      <Grid verticalAlign="middle" centered className="login-register">
+        <Grid.Column>
+          <Header as="h1">Create your account</Header>
           <Segment.Group stacked>
             <Segment>
               <p>Already have an account? <Link to="/login">Sign in</Link></p>
@@ -38,12 +37,10 @@ class Register extends Component {
                   <FormField
                     name="email"
                     type="email"
-                    label="Email"
                     reference={email => this.email = email}
                   />
                   <FormField
                     name="pw"
-                    label="Password"
                     type="password"
                     reference={pw => this.pw = pw}
                   />
@@ -57,10 +54,7 @@ class Register extends Component {
                       "That e-mail has been subscribed, but you have not yet clicked the verification link in your e-mail."
                     ]}
                   />}
-                <RegisterMessage
-                  registerErr={registerErr}
-                  handleDismiss={this.handleDismiss}
-                />
+                <ErrorMessage msg={msg} handleDismiss={this.handleDismiss} />
               </Form>
             </Segment>
           </Segment.Group>
@@ -69,14 +63,3 @@ class Register extends Component {
     );
   }
 }
-
-const RegisterMessage = ({ registerErr, handleDismiss }) =>
-  registerErr &&
-  <Message icon error onDismiss={handleDismiss}>
-    <Icon name="warning circle" />
-    <Message.Content>
-      <Message.Header>{registerErr}</Message.Header>
-    </Message.Content>
-  </Message>;
-
-export default Register;

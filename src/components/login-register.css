@@ -1,0 +1,7 @@
+.login-register {
+  height: 100vh;
+}
+
+.login-register div.column {
+  max-width: 450px;
+}

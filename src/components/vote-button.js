@@ -1,45 +1,27 @@
 import React, { Component } from "react";
 import { Button, Popup, Statistic, Icon } from "semantic-ui-react";
-import { ref, auth } from "../../config/constants";
-import { handleVote } from "../../helpers/database";
+import handleVote from "../lib/push-vote";
+import getVotes, { observe } from "../lib/get-votes";
 
 class VoteButton extends Component {
   state = { countVotes: 0, selected: false };
-  componentWillMount() {
-    const { resultId, cat } = this.props;
-    const mRef = ref.child(`medias/${resultId}/${cat.id}`).limitToLast(1);
+  componentDidMount() {
+    const { movieId, cat } = this.props;
+    this.unsubscribe = observe(movieId, cat.id, countVotes =>
+      this.setState({ countVotes }));
 
-    mRef.on("child_added", this.handleCountVotes);
-
-    mRef.on("child_changed", this.handleCountVotes);
-
-    mRef.on("child_removed", snap => {
-      if (snap.numChildren() > 0) this.handleCountVotes(snap);
-      else this.setState({ countVotes: 0 });
-    });
-
-    const votesRef = ref.child(`medias/${resultId}/${cat.id}/votes`);
-    votesRef.on("value", snap => {
-      const uid = auth.currentUser.uid;
-      if (snap.child(uid).exists()) this.setState({ selected: true });
-      else this.setState({ selected: false });
-    });
+    this.getVotes = getVotes(movieId, cat.id, selected =>
+      this.setState({ selected }));
   }
 
-  handleCountVotes = snap => {
-    let countVotes = snap.val();
-    this.setState({ countVotes });
-  };
-
   componentWillUnmount() {
-    const { resultId, cat } = this.props;
-    const mRef = ref.child(`medias/${resultId}/${cat.id}`);
-    mRef.off();
+    this.unsubscribe();
+    this.getVotes();
   }
 
   render() {
     const { countVotes, selected } = this.state;
-    const { resultId, cat } = this.props;
+    const { movieId, cat } = this.props;
     let color = selected ? "red" : "black";
     return (
       <Popup
@@ -63,7 +45,7 @@ class VoteButton extends Component {
                 </Statistic>
               )
             }}
-            onClick={() => handleVote(resultId, cat.id, selected)}
+            onClick={() => handleVote(movieId, cat.id, selected)}
           />
         }
         content={cat.name}

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { auth } from "../../config/constants";
+import { auth } from "../lib/fb";
 import { Menu, Button, Icon } from "semantic-ui-react";
 
-const Navigation = ({ loggedIn, signOut }) => (
+export default ({ loggedIn, signOut }) => (
   <Menu inverted fixed="top" style={{ opacity: 0.9 }}>
     {loggedIn && auth.currentUser
       ? <Menu.Menu position="right">
@@ -13,7 +13,7 @@ const Navigation = ({ loggedIn, signOut }) => (
             </Link>
           </Menu.Item>
           <Menu.Item>
-            <Link to="/movies/genres">
+            <Link to="/genres">
               <Icon name="film" />
             </Link>
           </Menu.Item>
@@ -36,5 +36,3 @@ const Navigation = ({ loggedIn, signOut }) => (
         </Menu.Menu>}
   </Menu>
 );
-
-export default Navigation;

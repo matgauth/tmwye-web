@@ -1,25 +1,24 @@
 import React, { Component } from "react";
 import { Route, BrowserRouter, Redirect, Switch } from "react-router-dom";
-import { auth } from "../config/constants";
-import Navigation from "../components/nav";
-import Login from "../components/login";
-import Register from "../components/register";
-import ListByGenre from "../components/list-by-genre";
-import ListByFood from "../components/list-by-food";
-import Categories from "../components/categories";
-import Spinner from "../components/spinner";
+import { auth } from "../lib/fb";
+import Navigation from "./nav";
+import Login from "./login";
+import Register from "./register";
+import ListByGenre from "./movies-by-genre";
+import ListByFood from "./movies-by-food";
+import Categories from "./categories";
+import Spinner from "./spinner";
 
 function PrivateRoute({ comp: Component, loggedIn, ...rest }) {
   return (
     <Route
       {...rest}
-      render={props => {
-        return loggedIn === true
+      render={props =>
+        loggedIn === true
           ? <Component {...props} />
           : <Redirect
               to={{ pathname: "/login", state: { from: props.location } }}
-            />;
-      }}
+            />}
     />
   );
 }
@@ -33,7 +32,7 @@ function PublicRoute({ comp: Component, loggedIn, ...rest }) {
     />
   );
 }
-class App extends Component {
+export default class extends Component {
   state = {
     loggedIn: false,
     loading: true
@@ -48,18 +47,23 @@ class App extends Component {
     }
   };
   componentDidMount() {
-    this.removeListener = auth.onAuthStateChanged(user => {
+    this.unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({
-          loggedIn: true
+          loggedIn: true,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loggedIn: false,
+          loading: false
         });
       }
-      this.setState({ loading: false });
     });
   }
 
   componentWillUnmount() {
-    this.removeListener();
+    this.unsubscribe();
   }
 
   render() {
@@ -78,18 +82,13 @@ class App extends Component {
               />
               <PrivateRoute
                 loggedIn={loggedIn}
-                path="/list-by-genres/:genreId"
+                path="/movies-by-genres/:genreId"
                 comp={ListByGenre}
               />
               <PrivateRoute
                 loggedIn={loggedIn}
-                path="/list-by-food/:foodId/:foodName"
+                path="/movies-by-food/:foodId"
                 comp={ListByFood}
-              />
-              <PrivateRoute
-                loggedIn={loggedIn}
-                path="/movies/:fbKey"
-                comp={Categories}
               />
               <PrivateRoute
                 loggedIn={loggedIn}
@@ -102,5 +101,3 @@ class App extends Component {
         </BrowserRouter>;
   }
 }
-
-export default App;

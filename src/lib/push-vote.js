@@ -1,5 +1,5 @@
-import { auth, ref } from "../config/constants";
-export function handleVote(imdbId, catId, selected) {
+import { auth, ref } from "./fb";
+export default (imdbId, catId, selected) => {
   const uid = auth.currentUser.uid;
   if (selected) {
     ref.child(`medias/${imdbId}/${catId}/votes/${uid}`).remove();
@@ -13,4 +13,4 @@ export function handleVote(imdbId, catId, selected) {
     updates[`/mediasByFood/${catId}/${imdbId}/votes`] = voteObj;
     ref.update(updates);
   }
-}
+};

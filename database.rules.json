@@ -1,6 +1,15 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "medias": {
+      "$imdbid": {
+        "$catid": {
+          ".read": "auth != null",
+          ".write": "auth != null",
+          ".indexOn": ".value"
+        }
+      }
+    }
   }
 }
