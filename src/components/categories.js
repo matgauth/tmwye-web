@@ -1,52 +1,32 @@
-import React, { Component } from "react";
+import React from "react";
+import { connect } from "react-firebase";
+
+import { Card, Container } from "semantic-ui-react";
+
 import Category from "./category";
 import Spinner from "./spinner";
-import getCategories from "../lib/get-categories";
-import { Card, Container } from "semantic-ui-react";
+
 import "./container.css";
 
-export default class extends Component {
-  state = { categories: null };
+const Categories = props => {
+  let loading = props.categories === undefined;
+  return loading
+    ? <Spinner loading={loading} />
+    : <Container text textAlign="center" className="container">
+        <Card.Group>
+          {Object.keys(props.categories).map(key => (
+            <Category
+              key={props.categories[key].id}
+              fbKey={props.match.params.fbKey}
+              category={props.categories[key]}
+            />
+          ))}
+        </Card.Group>
+      </Container>;
+};
 
-  getFbKey = props => {
-    return props.match.params.fbKey;
-  };
+const mapFirebaseToProps = props => ({
+  categories: props.match.params.fbKey
+});
 
-  async componentWillReceiveProps(nextProps) {
-    const fbKey = this.getFbKey(this.props),
-      nextFbKey = this.getFbKey(nextProps);
-
-    if (fbKey !== nextFbKey) {
-      this.fbKeyWillChange(nextFbKey);
-    }
-  }
-
-  fbKeyWillChange = async fbKey => {
-    const categories = await getCategories(fbKey);
-    this.setState({ categories });
-  };
-
-  async componentWillMount() {
-    const fbKey = this.getFbKey(this.props);
-    this.fbKeyWillChange(fbKey);
-  }
-
-  render() {
-    const { categories } = this.state;
-    const { fbKey } = this.props.match.params;
-    let loading = categories === null;
-    return loading
-      ? <Spinner loading={loading} />
-      : <Container text textAlign="center" className="container">
-          <Card.Group>
-            {Object.keys(categories).map(key => (
-              <Category
-                key={categories[key].id}
-                fbKey={fbKey}
-                category={categories[key]}
-              />
-            ))}
-          </Card.Group>
-        </Container>;
-  }
-}
+export default connect(mapFirebaseToProps)(Categories);

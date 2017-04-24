@@ -10,11 +10,7 @@ export default ({ movie, food }) => {
     : process.env.PUBLIC_URL + "/img/image.webp";
   return (
     <Item>
-      <Item.Image
-        size="medium"
-        src={poster}
-        alt={`${movie.title}-poster`}
-      />
+      <Item.Image size="medium" src={poster} alt={`${movie.title}-poster`} />
       <Item.Content verticalAlign="middle">
         <Item.Header as="h2">{movie.title}</Item.Header>
         <Item.Meta>

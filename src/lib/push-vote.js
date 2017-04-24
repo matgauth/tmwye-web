@@ -1,16 +1,16 @@
 import { auth, ref } from "./fb";
-export default (imdbId, catId, selected) => {
+export default (movieId, catId, selected) => {
   const uid = auth.currentUser.uid;
   if (selected) {
-    ref.child(`medias/${imdbId}/${catId}/votes/${uid}`).remove();
-    ref.child(`mediasByFood/${catId}/${imdbId}/votes/${uid}`).remove();
+    ref.child(`medias/${movieId}/${catId}/votes/${uid}`).remove();
+    ref.child(`mediasByFood/${catId}/${movieId}/votes/${uid}`).remove();
   } else {
     let updates = {};
-    const voteObj = {
+    const vote = {
       [uid]: true
     };
-    updates[`/medias/${imdbId}/${catId}/votes`] = voteObj;
-    updates[`/mediasByFood/${catId}/${imdbId}/votes`] = voteObj;
+    updates[`/medias/${movieId}/${catId}/votes`] = vote;
+    updates[`/mediasByFood/${catId}/${movieId}/votes`] = vote;
     ref.update(updates);
   }
 };

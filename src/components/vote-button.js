@@ -1,58 +1,53 @@
-import React, { Component } from "react";
-import { Button, Popup, Statistic, Icon } from "semantic-ui-react";
+import React from "react";
+import { connect } from "react-firebase";
+
+import { Button, Popup, Statistic } from "semantic-ui-react";
+
 import handleVote from "../lib/push-vote";
-import getVotes, { observe } from "../lib/get-votes";
 
-class VoteButton extends Component {
-  state = { countVotes: 0, selected: false };
-  componentDidMount() {
-    const { movieId, cat } = this.props;
-    this.unsubscribe = observe(movieId, cat.id, countVotes =>
-      this.setState({ countVotes }));
+import { auth } from "../lib/fb";
 
-    this.getVotes = getVotes(movieId, cat.id, selected =>
-      this.setState({ selected }));
-  }
+const VoteButton = ({ selected, count, movieId, cat }) => {
+  let color = selected ? "red" : "black";
+  const content = (
+    <Statistic size="mini" color={color}>
+      <Statistic.Value>
+        {count ? count.votes_count : 0}
+      </Statistic.Value>
+      <Statistic.Label>
+        {count ? "Votes" : "Vote"}
+      </Statistic.Label>
+    </Statistic>
+  );
+  return (
+    <Popup
+      trigger={
+        <Button
+          color={color}
+          icon="food"
+          label={{
+            basic: true,
+            pointing: "left",
+            content
+          }}
+          onClick={() => handleVote(movieId, cat.id, selected)}
+        />
+      }
+      content={cat.name}
+      inverted
+    />
+  );
+};
 
-  componentWillUnmount() {
-    this.unsubscribe();
-    this.getVotes();
-  }
+const mapFirebaseToProps = ({ movieId, cat }) => {
+  const count = {
+    path: `medias/${movieId}/${cat.id}`,
+    limitToLast: 1
+  };
+  return {
+    count: count,
+    selected: `medias/${movieId}/${cat.id}/votes/${auth.currentUser.uid}`
+  };
+};
 
-  render() {
-    const { countVotes, selected } = this.state;
-    const { movieId, cat } = this.props;
-    let color = selected ? "red" : "black";
-    return (
-      <Popup
-        trigger={
-          <Button
-            color={color}
-            icon="food"
-            label={{
-              basic: true,
-              pointing: "left",
-              content: (
-                <Statistic size="mini" color={color}>
-                  <Statistic.Value>
-                    {countVotes >= 0
-                      ? countVotes
-                      : <Icon name="circle notched" loading />}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {countVotes >= 0 ? "Votes" : null}
-                  </Statistic.Label>
-                </Statistic>
-              )
-            }}
-            onClick={() => handleVote(movieId, cat.id, selected)}
-          />
-        }
-        content={cat.name}
-        inverted
-      />
-    );
-  }
-}
-
-export default VoteButton;
+export default connect(mapFirebaseToProps)(VoteButton);

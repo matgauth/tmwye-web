@@ -10,7 +10,7 @@ export default class extends Component {
   parseGenreId = props => {
     return parseInt(props.match.params.genreId, 10);
   };
-  async componentWillMount() {
+  async componentDidMount() {
     const genreId = this.parseGenreId(this.props);
     const promise = await getMoviesByGenre(genreId);
     this.setState({ food: promise[0], movies: promise[1] });
@@ -25,7 +25,7 @@ export default class extends Component {
             ? movies.map(movie => (
                 <ItemByGenre key={movie.id} movie={movie} food={food} />
               ))
-            : new Array(3).fill(null).map((el, i) => <FakeItem key={i} />)}
+            : new Array(5).fill(null).map((el, i) => <FakeItem key={i} />)}
         </Item.Group>
       </Container>
     );

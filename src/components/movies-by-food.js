@@ -12,7 +12,7 @@ export default class extends Component {
     return parseInt(props.match.params.foodId, 10);
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     const foodId = this.parseFoodId(this.props);
     const movies = await getMoviesByFood(foodId);
     this.setState({ movies });
