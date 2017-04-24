@@ -1,15 +1,13 @@
-import React from "react";
-import { connect } from "react-firebase";
+import React from "react"
+import { connect } from "react-firebase"
 
-import { Card, Container } from "semantic-ui-react";
+import { Card, Container } from "semantic-ui-react"
 
-import Category from "./category";
-import Spinner from "./spinner";
-
-import "./container.css";
+import Category from "../components/category"
+import Spinner from "../components/spinner"
 
 const Categories = props => {
-  let loading = props.categories === undefined;
+  let loading = props.categories === undefined
   return loading
     ? <Spinner loading={loading} />
     : <Container text textAlign="center" className="container">
@@ -22,11 +20,11 @@ const Categories = props => {
             />
           ))}
         </Card.Group>
-      </Container>;
-};
+      </Container>
+}
 
 const mapFirebaseToProps = props => ({
   categories: props.match.params.fbKey
-});
+})
 
-export default connect(mapFirebaseToProps)(Categories);
+export default connect(mapFirebaseToProps)(Categories)

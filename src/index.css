@@ -1,3 +1,15 @@
+.container {
+  margin: 5em auto;
+}
+
+.login-register {
+  height: 100vh;
+}
+
+.login-register div.column {
+  max-width: 450px;
+}
+
 .movie img {
   max-width: 100%;
   max-height: 100%;

@@ -1,15 +1,15 @@
-import { ref, auth } from "./fb";
+import { ref, auth } from "./fb"
 
 export function signUp(email, pw) {
-  return auth.createUserWithEmailAndPassword(email, pw).then(saveUser);
+  return auth.createUserWithEmailAndPassword(email, pw).then(saveUser)
 }
 
 export function signInWithProvider(provider) {
-  return auth.signInWithPopup(provider).then(res => saveUser(res.user));
+  return auth.signInWithPopup(provider).then(res => saveUser(res.user))
 }
 
 export function resetPassword(email) {
-  return auth.sendPasswordResetEmail(email);
+  return auth.sendPasswordResetEmail(email)
 }
 
 function saveUser(user) {
@@ -18,5 +18,5 @@ function saveUser(user) {
     uid: user.uid,
     displayName: user.displayName,
     photoURL: user.photoURL
-  });
+  })
 }

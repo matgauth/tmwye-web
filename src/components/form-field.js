@@ -1,5 +1,6 @@
-import React from "react";
-import { Form } from "semantic-ui-react";
+import React from "react"
+
+import { Form } from "semantic-ui-react"
 
 export default ({ name, type, reference }) => (
   <Form.Field>
@@ -8,4 +9,4 @@ export default ({ name, type, reference }) => (
     </label>
     <input name={name} type={type} ref={reference} />
   </Form.Field>
-);
+)

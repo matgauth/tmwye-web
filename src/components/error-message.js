@@ -1,5 +1,6 @@
-import React from "react";
-import { Message, Icon } from "semantic-ui-react";
+import React from "react"
+
+import { Message, Icon } from "semantic-ui-react"
 
 export default ({ msg, handleDismiss }) =>
   msg &&
@@ -8,4 +9,4 @@ export default ({ msg, handleDismiss }) =>
     <Message.Content>
       <Message.Header>{msg}</Message.Header>
     </Message.Content>
-  </Message>;
+  </Message>

@@ -1,14 +1,14 @@
-import React from "react";
-import { connect } from "react-firebase";
+import React from "react"
+import { connect } from "react-firebase"
 
-import { Button, Popup, Statistic } from "semantic-ui-react";
+import { Button, Popup, Statistic } from "semantic-ui-react"
 
-import handleVote from "../lib/push-vote";
+import handleVote from "../lib/push-vote"
 
-import { auth } from "../lib/fb";
+import { auth } from "../lib/fb"
 
 const VoteButton = ({ selected, count, movieId, cat }) => {
-  let color = selected ? "red" : "black";
+  let color = selected ? "red" : "black"
   const content = (
     <Statistic size="mini" color={color}>
       <Statistic.Value>
@@ -18,7 +18,7 @@ const VoteButton = ({ selected, count, movieId, cat }) => {
         {count ? "Votes" : "Vote"}
       </Statistic.Label>
     </Statistic>
-  );
+  )
   return (
     <Popup
       trigger={
@@ -36,18 +36,18 @@ const VoteButton = ({ selected, count, movieId, cat }) => {
       content={cat.name}
       inverted
     />
-  );
-};
+  )
+}
 
 const mapFirebaseToProps = ({ movieId, cat }) => {
   const count = {
     path: `medias/${movieId}/${cat.id}`,
     limitToLast: 1
-  };
+  }
   return {
     count: count,
     selected: `medias/${movieId}/${cat.id}/votes/${auth.currentUser.uid}`
-  };
-};
+  }
+}
 
-export default connect(mapFirebaseToProps)(VoteButton);
+export default connect(mapFirebaseToProps)(VoteButton)

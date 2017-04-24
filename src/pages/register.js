@@ -1,28 +1,32 @@
-import React, { Component } from "react";
-import { signUp } from "../lib/auth";
-import { auth } from "../lib/constants";
-import { Link } from "react-router-dom";
-import FormField from "./form-field";
-import ErrorMessage from "./error-message";
-import { Form, Button, Message, Segment, Grid, Header } from "semantic-ui-react";
+import React, { Component } from "react"
+import { Link } from "react-router-dom"
+
+import { Form, Button, Message, Segment, Grid, Header } from "semantic-ui-react"
+
+import FormField from "../components/form-field"
+import ErrorMessage from "../components/error-message"
+
+import { signUp } from "../lib/auth"
+import { auth } from "../lib/constants"
 
 export default class extends Component {
   state = {
     emailSent: false,
     msg: null
-  };
+  }
   handleSignUp = e => {
-    e.preventDefault();
+    e.preventDefault()
     signUp(this.email.value, this.pw.value).catch(e =>
-      this.setState({ msg: e.message }));
+      this.setState({ msg: e.message })
+    )
     if (auth.currentUser !== null) {
-      auth.currentUser.sendEmailVerification();
-      this.setState({ emailSent: true });
+      auth.currentUser.sendEmailVerification()
+      this.setState({ emailSent: true })
     }
-  };
-  handleDismiss = () => this.setState({ msg: null });
+  }
+  handleDismiss = () => this.setState({ msg: null })
   render() {
-    const { emailSent, msg } = this.state;
+    const { emailSent, msg } = this.state
     return (
       <Grid verticalAlign="middle" centered className="login-register">
         <Grid.Column>
@@ -37,12 +41,12 @@ export default class extends Component {
                   <FormField
                     name="email"
                     type="email"
-                    reference={email => this.email = email}
+                    reference={email => (this.email = email)}
                   />
                   <FormField
                     name="pw"
                     type="password"
-                    reference={pw => this.pw = pw}
+                    reference={pw => (this.pw = pw)}
                   />
                 </Form.Group>
                 <Button primary type="submit">SIGN UP</Button>
@@ -60,6 +64,6 @@ export default class extends Component {
           </Segment.Group>
         </Grid.Column>
       </Grid>
-    );
+    )
   }
 }

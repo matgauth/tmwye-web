@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
+import { Link } from "react-router-dom"
 import {
   Button,
   Form,
@@ -7,36 +8,36 @@ import {
   Grid,
   Segment,
   Header
-} from "semantic-ui-react";
-import { signInWithProvider, resetPassword } from "../lib/auth";
-import { Link } from "react-router-dom";
-import FormField from "./form-field";
-import ErrorMessage from "./error-message";
-import { facebook, google, auth } from "../lib/fb";
-import "./login-register.css";
+} from "semantic-ui-react"
+
+import FormField from "../components/form-field"
+import ErrorMessage from "../components/error-message"
+
+import { signInWithProvider, resetPassword } from "../lib/auth"
+import { facebook, google, auth } from "../lib/fb"
 
 export default class extends Component {
-  state = { msg: null };
+  state = { msg: null }
   handleSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
     auth
       .signInWithEmailAndPassword(this.email.value, this.pw.value)
-      .catch(e => this.setState({ msg: e.message }));
-  };
+      .catch(e => this.setState({ msg: e.message }))
+  }
 
   resetPassword = async () => {
     try {
-      await resetPassword(this.email.value);
+      await resetPassword(this.email.value)
       this.setState({
         msg: `Password reset email sent to ${this.email.value}.`
-      });
+      })
     } catch (e) {
-      this.setState({ msg: e.message });
+      this.setState({ msg: e.message })
     }
-  };
-  handleDismiss = () => this.setState({ msg: null });
+  }
+  handleDismiss = () => this.setState({ msg: null })
   render() {
-    const { msg } = this.state;
+    const { msg } = this.state
     return (
       <Grid verticalAlign="middle" centered className="login-register">
         <Grid.Column>
@@ -53,12 +54,12 @@ export default class extends Component {
                   <FormField
                     name="email"
                     type="email"
-                    reference={email => this.email = email}
+                    reference={email => (this.email = email)}
                   />
                   <FormField
                     name="pw"
                     type="password"
-                    reference={pw => this.pw = pw}
+                    reference={pw => (this.pw = pw)}
                   />
                 </Form.Group>
                 <Button primary type="submit">SIGN IN</Button>
@@ -77,17 +78,17 @@ export default class extends Component {
           </Segment.Group>
         </Grid.Column>
       </Grid>
-    );
+    )
   }
 }
 
 const ProviderForm = ({ provider }) => {
-  let label = provider === google ? "google" : "facebook";
+  let label = provider === google ? "google" : "facebook"
   return (
     <Form
       onSubmit={e => {
-        e.preventDefault();
-        signInWithProvider(provider);
+        e.preventDefault()
+        signInWithProvider(provider)
       }}
     >
       <Button
@@ -97,5 +98,5 @@ const ProviderForm = ({ provider }) => {
         <Icon name={label} /> SIGN IN WITH {label.toUpperCase()}
       </Button>
     </Form>
-  );
-};
+  )
+}

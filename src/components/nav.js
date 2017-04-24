@@ -1,7 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { auth } from "../lib/fb";
-import { Menu, Button, Icon } from "semantic-ui-react";
+import React from "react"
+import { Link } from "react-router-dom"
+
+import { Menu, Button, Icon } from "semantic-ui-react"
+
+import { auth } from "../lib/fb"
 
 export default ({ loggedIn, signOut }) => (
   <Menu inverted fixed="top" style={{ opacity: 0.9 }}>
@@ -35,4 +37,4 @@ export default ({ loggedIn, signOut }) => (
           </Menu.Item>
         </Menu.Menu>}
   </Menu>
-);
+)

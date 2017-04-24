@@ -1,13 +1,15 @@
-import React from "react";
-import { Item } from "semantic-ui-react";
-import { IMAGE_SEARCH } from "../lib/constants";
-import VoteButton from "./vote-button";
-import "./item.css";
+import React from "react"
+
+import { Item } from "semantic-ui-react"
+
+import VoteButton from "./vote-button"
+
+import { IMAGE_SEARCH } from "../lib/constants"
 
 export default ({ movie, food }) => {
   const poster = movie.poster_path
     ? IMAGE_SEARCH + movie.poster_path
-    : process.env.PUBLIC_URL + "/img/image.webp";
+    : process.env.PUBLIC_URL + "/img/image.webp"
   return (
     <Item>
       <Item.Image size="medium" src={poster} alt={`${movie.title}-poster`} />
@@ -31,5 +33,5 @@ export default ({ movie, food }) => {
         </Item.Extra>
       </Item.Content>
     </Item>
-  );
-};
+  )
+}

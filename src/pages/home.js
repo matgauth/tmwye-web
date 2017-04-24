@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Header, Container, Icon } from "semantic-ui-react";
-import "./container.css";
+import React, { Component } from "react"
+
+import { Header, Container, Icon } from "semantic-ui-react"
 
 export default class extends Component {
   render() {
@@ -19,6 +19,6 @@ export default class extends Component {
           </Header.Content>
         </Header>
       </Container>
-    );
+    )
   }
 }

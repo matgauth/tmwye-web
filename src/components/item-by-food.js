@@ -1,7 +1,8 @@
-import React from "react";
-import { Card, Image, Segment, Header } from "semantic-ui-react";
-import { IMAGE_SEARCH } from "../lib/constants";
-import "./item.css";
+import React from "react"
+
+import { Card, Image, Segment, Header } from "semantic-ui-react"
+
+import { IMAGE_SEARCH } from "../lib/constants"
 
 export default ({ movie }) => {
   const label = {
@@ -11,8 +12,8 @@ export default ({ movie }) => {
     content: movie.votes_count,
     icon: "thumbs up",
     ribbon: true
-  };
-  const noPosterStyle = { margin: "5em auto", width: 175, height: 175 };
+  }
+  const noPosterStyle = { margin: "5em auto", width: 175, height: 175 }
   return (
     <Card raised centered className="movie">
       <Card.Header>
@@ -33,5 +34,5 @@ export default ({ movie }) => {
             </Segment>}
       </Card.Header>
     </Card>
-  );
-};
+  )
+}
