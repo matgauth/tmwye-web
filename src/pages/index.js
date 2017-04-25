@@ -7,6 +7,7 @@ import Register from "./register"
 import Categories from "./categories"
 import ListByGenre from "./movies-by-genre"
 import ListByFood from "./movies-by-food"
+import Account from "./account"
 
 import Nav from "../components/nav"
 import Spinner from "../components/spinner"
@@ -93,6 +94,11 @@ export default class extends Component {
                 loggedIn={loggedIn}
                 path="/movies-by-food/:foodId"
                 comp={ListByFood}
+              />
+              <PrivateRoute
+                loggedIn={loggedIn}
+                path="/account"
+                comp={Account}
               />
               <PrivateRoute
                 loggedIn={loggedIn}

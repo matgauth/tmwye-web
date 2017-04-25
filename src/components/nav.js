@@ -9,17 +9,17 @@ export default ({ loggedIn, signOut }) => (
   <Menu icon="labeled" inverted fixed="top">
     {loggedIn && auth.currentUser
       ? <Menu.Menu position="right">
-          <MenuLink link="/food" icon="food" title="Repas" />
+          <MenuLink link="/food" icon="food" title="Meals" />
           <MenuLink link="/genres" icon="film" title="Films" />
-          <MenuLink link="/account" icon="user" title="Compte" />
+          <MenuLink link="/account" icon="user" title="Account" />
           <Menu.Item onClick={signOut}>
             <Icon name="sign out" />
-            Déconnexion
+            Sign out
           </Menu.Item>
         </Menu.Menu>
       : <Menu.Menu position="right">
-          <MenuLink link="/login" icon="sign in" />
-          <MenuLink link="/register" icon="signup" />
+          <MenuLink link="/login" icon="sign in" title="Sign in" />
+          <MenuLink link="/register" icon="signup" title="Sign up" />
         </Menu.Menu>}
   </Menu>
 )
