@@ -10,8 +10,8 @@ const Categories = props => {
   let loading = props.categories === undefined
   return loading
     ? <Spinner loading={loading} />
-    : <Container text textAlign="center" className="container">
-        <Card.Group>
+    : <Container textAlign="center" className="container">
+        <Card.Group itemsPerRow={4} stackable>
           {Object.keys(props.categories).map(key => (
             <Category
               key={props.categories[key].id}
