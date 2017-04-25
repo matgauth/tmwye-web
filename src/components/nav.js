@@ -1,34 +1,39 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
-import { Menu, Button, Icon } from "semantic-ui-react"
+import { Menu, Icon } from "semantic-ui-react"
 
 import { auth } from "../lib/fb"
 
 export default ({ loggedIn, signOut }) => (
-  <Menu inverted fixed="top">
+  <Menu icon="labeled" inverted fixed="top">
     {loggedIn && auth.currentUser
       ? <Menu.Menu position="right">
-          <Menu.Item as={Link} to="/food">
-            <Icon name="food" />
-          </Menu.Item>
-          <Menu.Item as={Link} to="/genres">
-            <Icon name="film" />
-          </Menu.Item>
-          <Menu.Item as={Link} to="/account">
-            <Icon name="user" />{auth.currentUser.email}
-          </Menu.Item>
-          <Menu.Item>
-            <Button secondary icon="sign out" onClick={signOut} />
+          <MenuLink link="/food" icon="food" title="Repas" />
+          <MenuLink link="/genres" icon="film" title="Films" />
+          <MenuLink link="/account" icon="user" title="Compte" />
+          <Menu.Item onClick={signOut}>
+            <Icon name="sign out" />
+            Déconnexion
           </Menu.Item>
         </Menu.Menu>
       : <Menu.Menu position="right">
-          <Menu.Item as={Link} to="/login">
-            <Icon name="sign in" />
-          </Menu.Item>
-          <Menu.Item as={Link} to="/register">
-            <Icon name="signup" />
-          </Menu.Item>
+          <MenuLink link="/login" icon="sign in" />
+          <MenuLink link="/register" icon="signup" />
         </Menu.Menu>}
   </Menu>
+)
+
+const MenuLink = ({ link, icon, title }) => (
+  <Menu.Item
+    as={NavLink}
+    to={link}
+    activeStyle={{
+      backgroundColor: "white",
+      color: "black"
+    }}
+  >
+    <Icon name={icon} />
+    {title}
+  </Menu.Item>
 )
